@@ -1,13 +1,21 @@
 import { useState } from "react"
 import { countries } from "../../db/db"
 import styles from "./Form.module.css"
+import { SearchType } from "../../types"
 
 export default function Form() {
 
-    const [ search , setSearch ] = useState({
+    const [ search , setSearch ] = useState<SearchType>({
         city : '',
         country : ''
     })
+
+    const handleChange = ( e : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> ) => { 
+        setSearch ({
+            ...search,
+            [e.target.name] : e.target.value
+        })
+    }
 
 
     return (
@@ -19,13 +27,15 @@ export default function Form() {
                     id="city"
                     name="city"
                     placeholder="Ciudad"
+                    value={search.city}
+                    onChange={ e => handleChange(e)}
                 />
             </div>
 
             <div className={styles.field}>
                 <label htmlFor="country">Pais : </label>
 
-                <select name="country" id="country">
+                <select name="country" id="country" value={search.country} onChange={ (e) =>  handleChange(e) }>
 
                     <option value=""> -- Seleccione un Pais -- </option>
 
