@@ -1,19 +1,32 @@
 import axios from "axios"
-import { SearchType, Weather } from "../types"
+import { SearchType } from "../types"
+import { z } from 'zod'
 
 
 // Type Guards
-function ConfirmType( weather : unknown ) : weather is Weather { 
-    return (
-        Boolean( weather ) && 
-        typeof weather === 'object' &&
-        typeof ( weather as Weather).name === 'string' &&
-        typeof ( weather as Weather).main.temp === 'number' &&
-        typeof ( weather as Weather).main.temp_min === 'number' &&
-        typeof ( weather as Weather).main.temp_max === 'number' 
+// function ConfirmType( weather : unknown ) : weather is Weather { 
+//     return (
+//         Boolean( weather ) && 
+//         typeof weather === 'object' &&
+//         typeof ( weather as Weather).name === 'string' &&
+//         typeof ( weather as Weather).main.temp === 'number' &&
+//         typeof ( weather as Weather).main.temp_min === 'number' &&
+//         typeof ( weather as Weather).main.temp_max === 'number' 
 
-    )
-}
+//     )
+// }
+
+// ZOD 
+const Weather = z.object({
+    name  : z.string(),
+    main : z.object({
+        temp : z.number(),
+        temp_max : z.number(),
+        temp_min : z.number()
+    })
+})
+
+type Weather = z.infer<typeof Weather>
 
 
 export default function useWeather() {
@@ -41,13 +54,24 @@ export default function useWeather() {
             // console.log(weatherResult.name)
 
             // Type Guards
-            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
-            const resultado = ConfirmType( weatherResult )
+            // const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            // const resultado = ConfirmType( weatherResult )
             
-            if( resultado ) { 
-                console.log( weatherResult.name)
+            // if( resultado ) { 
+            //     console.log( weatherResult.name)
+            // } else { 
+            //     console.log('la respuesta esta mal formulada')
+            // }
+
+            // Zod 
+            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            const resultado = Weather.safeParse( weatherResult )
+            console.log( resultado )
+
+            if( resultado.success) { 
+                console.log( resultado.data.name)
             } else { 
-                console.log('la respuesta esta mal formulada')
+                console.log( 'respuesta mal formada ')
             }
 
         } catch (error) {
