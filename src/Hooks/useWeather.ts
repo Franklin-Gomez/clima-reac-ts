@@ -1,5 +1,5 @@
 import axios from "axios"
-import { SearchType } from "../types"
+import { SearchType, weather } from "../types"
 
 export default function useWeather() {
 
@@ -19,8 +19,9 @@ export default function useWeather() {
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appid}`
             
             // asignamos la variable data el nombre de weatherResult
-            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
-
+            const {data : weatherResult } = await axios<weather>( weatherUrl , { method : 'get'});
+            
+            console.log( weatherResult )
 
         } catch (error) {
             console.log( error)
