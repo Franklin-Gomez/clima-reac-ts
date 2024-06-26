@@ -1,5 +1,20 @@
 import axios from "axios"
-import { SearchType, weather } from "../types"
+import { SearchType, Weather } from "../types"
+
+
+// Type Guards
+function ConfirmType( weather : unknown ) : weather is Weather { 
+    return (
+        Boolean( weather ) && 
+        typeof weather === 'object' &&
+        typeof ( weather as Weather).name === 'string' &&
+        typeof ( weather as Weather).main.temp === 'number' &&
+        typeof ( weather as Weather).main.temp_min === 'number' &&
+        typeof ( weather as Weather).main.temp_max === 'number' 
+
+    )
+}
+
 
 export default function useWeather() {
 
@@ -19,9 +34,21 @@ export default function useWeather() {
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appid}`
             
             // asignamos la variable data el nombre de weatherResult
-            const {data : weatherResult } = await axios<weather>( weatherUrl , { method : 'get'});
+
+            // Castear el type - Asignar Type
+            // const {data : weatherResult } = await axios<weather>( weatherUrl , { method : 'get'});
+            // console.log(weatherResult.main.temp)
+            // console.log(weatherResult.name)
+
+            // Type Guards
+            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            const resultado = ConfirmType( weatherResult )
             
-            console.log( weatherResult )
+            if( resultado ) { 
+                console.log( weatherResult.name)
+            } else { 
+                console.log('la respuesta esta mal formulada')
+            }
 
         } catch (error) {
             console.log( error)
