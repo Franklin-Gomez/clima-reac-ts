@@ -1,6 +1,7 @@
 import axios from "axios"
 import { SearchType } from "../types"
-import { z } from 'zod'
+// import { z } from 'zod'
+import { object , number , string , InferOutput , parse} from "valibot";
 
 
 // Type Guards
@@ -17,17 +18,28 @@ import { z } from 'zod'
 // }
 
 // ZOD 
-const Weather = z.object({
-    name  : z.string(),
-    main : z.object({
-        temp : z.number(),
-        temp_max : z.number(),
-        temp_min : z.number()
+// const Weather = z.object({
+//     name  : z.string(),
+//     main : z.object({
+//         temp : z.number(),
+//         temp_max : z.number(),
+//         temp_min : z.number()
+//     })
+// })
+
+//type Weather = z.infer<typeof Weather>
+
+// Valibot
+const WeatherSchema = object({
+    name : string(),
+    main : object({
+        temp : number(),
+        temp_max : number(),
+        temp_min : number()
     })
 })
 
-type Weather = z.infer<typeof Weather>
-
+type Weather = InferOutput<typeof WeatherSchema>
 
 export default function useWeather() {
 
@@ -64,15 +76,23 @@ export default function useWeather() {
             // }
 
             // Zod 
-            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
-            const resultado = Weather.safeParse( weatherResult )
-            console.log( resultado )
+            // const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            // const resultado = Weather.safeParse( weatherResult )
+            // console.log( resultado )
 
-            if( resultado.success) { 
-                console.log( resultado.data.name)
-            } else { 
-                console.log( 'respuesta mal formada ')
-            }
+            // if( resultado.success) { 
+            //     console.log( resultado.data.name)
+            // } else { 
+            //     console.log( 'respuesta mal formada ')
+            // }
+
+            // Valibot 
+            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            const resultado = parse( WeatherSchema , weatherResult )
+
+            if( resultado ) { 
+                console.log( resultado.name)
+            } 
 
         } catch (error) {
             console.log( error)
