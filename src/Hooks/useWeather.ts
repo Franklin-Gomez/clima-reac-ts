@@ -1,7 +1,8 @@
 import axios from "axios"
 import { SearchType } from "../types"
-// import { z } from 'zod'
-import { object , number , string , InferOutput , parse} from "valibot";
+import { z } from 'zod'
+import { useState } from "react"
+//import { object , number , string , InferOutput , parse} from "valibot";
 
 
 // Type Guards
@@ -18,30 +19,39 @@ import { object , number , string , InferOutput , parse} from "valibot";
 // }
 
 // ZOD 
-// const Weather = z.object({
-//     name  : z.string(),
-//     main : z.object({
-//         temp : z.number(),
-//         temp_max : z.number(),
-//         temp_min : z.number()
-//     })
-// })
-
-//type Weather = z.infer<typeof Weather>
-
-// Valibot
-const WeatherSchema = object({
-    name : string(),
-    main : object({
-        temp : number(),
-        temp_max : number(),
-        temp_min : number()
+const Weather = z.object({
+    name  : z.string(),
+    main : z.object({
+        temp : z.number(),
+        temp_max : z.number(),
+        temp_min : z.number()
     })
 })
 
-type Weather = InferOutput<typeof WeatherSchema>
+export type Weather = z.infer<typeof Weather>
+
+// Valibot
+// const WeatherSchema = object({
+//     name : string(),
+//     main : object({
+//         temp : number(),
+//         temp_max : number(),
+//         temp_min : number()
+//     })
+// })
+
+// type Weather = InferOutput<typeof WeatherSchema>
 
 export default function useWeather() {
+
+    const [ weather , setWweater ] = useState<Weather>({
+        name  : '',
+        main : {
+            temp : 0,
+            temp_max : 0,
+            temp_min : 0
+        }
+    })
 
     const fetchWeather = async (search : SearchType) => { 
         
@@ -76,23 +86,22 @@ export default function useWeather() {
             // }
 
             // Zod 
-            // const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
-            // const resultado = Weather.safeParse( weatherResult )
-            // console.log( resultado )
+            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            const resultado = Weather.safeParse( weatherResult )
 
-            // if( resultado.success) { 
-            //     console.log( resultado.data.name)
-            // } else { 
-            //     console.log( 'respuesta mal formada ')
-            // }
+            if( resultado.success) { 
+                setWweater( resultado.data )
+            } else { 
+                console.log( 'respuesta mal formada ')
+            }
 
             // Valibot 
-            const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
-            const resultado = parse( WeatherSchema , weatherResult )
+            // const {data : weatherResult } = await axios( weatherUrl , { method : 'get'});
+            // const resultado = parse( WeatherSchema , weatherResult )
 
-            if( resultado ) { 
-                console.log( resultado.name)
-            } 
+            // if( resultado ) { 
+            //     console.log( resultado.name)
+            // } 
 
         } catch (error) {
             console.log( error)
@@ -102,6 +111,7 @@ export default function useWeather() {
     }
 
     return { 
+        weather,
         fetchWeather
     }
 
