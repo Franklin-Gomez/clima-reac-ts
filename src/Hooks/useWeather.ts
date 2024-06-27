@@ -1,7 +1,7 @@
 import axios from "axios"
 import { SearchType } from "../types"
 import { z } from 'zod'
-import { useState } from "react"
+import { useMemo, useState } from "react"
 //import { object , number , string , InferOutput , parse} from "valibot";
 
 
@@ -103,15 +103,19 @@ export default function useWeather() {
             //     console.log( resultado.name)
             // } 
 
+
+
         } catch (error) {
             console.log( error)
         }
 
-
     }
+
+    const hasWeatherData = useMemo(() => weather.name , [weather])
 
     return { 
         weather,
+        hasWeatherData,
         fetchWeather
     }
 
