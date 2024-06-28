@@ -42,16 +42,18 @@ export type Weather = z.infer<typeof Weather>
 
 // type Weather = InferOutput<typeof WeatherSchema>
 
+const initialWeather = {
+    name  : '',
+    main : {
+        temp : 0,
+        temp_max : 0,
+        temp_min : 0
+    }
+}
+
 export default function useWeather() {
 
-    const [ weather , setWweater ] = useState<Weather>({
-        name  : '',
-        main : {
-            temp : 0,
-            temp_max : 0,
-            temp_min : 0
-        }
-    })
+    const [ weather , setWweater ] = useState<Weather>( initialWeather )
 
     const [ loading , setLoading ] = useState( false )
 
@@ -60,6 +62,7 @@ export default function useWeather() {
         const appid = import.meta.env.VITE_API_KEY;
 
         setLoading(true)
+        setWweater( initialWeather )
         
         try {
             const geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&&appid=${appid}`
