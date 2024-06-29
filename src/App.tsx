@@ -1,4 +1,5 @@
 import style from './App.module.css'
+import Formulario from './Components/Form/Formulario'
 
 function App() {
 
@@ -7,7 +8,7 @@ function App() {
       <h1 className={style.title}> Clima Real Time </h1>
 
       <div className={style.container}>
-        <div> Formulario </div>
+        <Formulario/>
         <div> Clima </div>
       </div>
     </>
