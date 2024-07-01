@@ -18,9 +18,17 @@ const mySchema = z.object( {
 
 export type weather = z.infer<typeof mySchema>
 
+// Custom Hook
 export default function useWeather () { 
 
-    const [ weater , setWeather ] = useState<weather>()
+    const [ weater , setWeather ] = useState<weather>({ 
+        name : '',
+        main : { 
+            temp : 0,
+            temp_max : 0,
+            temp_min : 0
+        }
+    })
 
     const fetchWeather = async (  search : SearchType  ) => { 
         
