@@ -4,7 +4,10 @@ import useWeather from './Hook/useWeather'
 
 function App() {
 
-  const { fetchWeather } = useWeather()
+
+
+  const { fetchWeather , weater } = useWeather()
+  
 
   return (
     <>
@@ -14,7 +17,7 @@ function App() {
         <Formulario
           fetchWeather={fetchWeather}
         />
-        <div> Clima </div>
+        
       </div>
     </>
   )

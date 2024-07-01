@@ -1,6 +1,7 @@
 import { SearchType } from "../Types"
 import axios from "axios"
 import { z } from 'zod'
+import { useState } from "react"
 
 
 // schema
@@ -17,9 +18,9 @@ const mySchema = z.object( {
 
 export type weather = z.infer<typeof mySchema>
 
-
 export default function useWeather () { 
 
+    const [ weater , setWeather ] = useState<weather>()
 
     const fetchWeather = async (  search : SearchType  ) => { 
         
@@ -27,7 +28,7 @@ export default function useWeather () {
 
         try {
 
-            const resultado = await axios( url)
+            const resultado = await axios( url )
 
             const lon = resultado.data[0].lon
             const lat = resultado.data[0].lat
@@ -36,12 +37,17 @@ export default function useWeather () {
 
             const { data } = await axios (url2 )
 
-            // add type
-            const resultado2 = mySchema.safeParse( data )
+            // add type to respond
+            const weatherData = mySchema.safeParse( data )
             
+            if( weatherData.success ) { 
+                setWeather( weatherData.data )
+            }
             
         } catch (error) {
+
             console.log ( error )
+
         }
 
 
@@ -49,6 +55,7 @@ export default function useWeather () {
 
 
     return { 
+        weater,
         fetchWeather
     }
 
