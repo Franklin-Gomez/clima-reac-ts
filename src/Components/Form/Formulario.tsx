@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { countries } from "../../db/data"
 import style from './Formulario.module.css'
+import { CountryType } from "../../Types"
 
 export default function Formulario() {
 
-
-    const [ country , setCountry ] = useState( { 
+    const [ country , setCountry ] = useState<CountryType>( { 
         city : '',
         country : ''
     })
