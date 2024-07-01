@@ -1,9 +1,17 @@
+import { SearchType } from "../Types"
 
 
 export default function useWeather () { 
 
 
-    const fetchWeather = () => { 
+    const fetchWeather = (  search : SearchType  ) => { 
+    
+        try {
+            
+        } catch (error) {
+            console.log ( error )
+        }
+
 
     }
 

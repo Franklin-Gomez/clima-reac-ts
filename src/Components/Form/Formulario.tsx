@@ -1,27 +1,42 @@
 import { useState } from "react"
 import { countries } from "../../db/data"
 import style from './Formulario.module.css'
-import { CountryType } from "../../Types"
+import { SearchType } from "../../Types"
 
-export default function Formulario() {
+type FormularioProps = { 
+    fetchWeather :  ( search: SearchType ) => void
+}
 
-    const [ country , setCountry ] = useState<CountryType>( { 
+export default function Formulario( { fetchWeather } : FormularioProps ) {
+
+    const [ search , setSearch ] = useState<SearchType>( { 
         city : '',
         country : ''
     })
 
     const handleChange = ( e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>  ) => { 
-        setCountry (
+        setSearch (
             {
-                ...country,
+                ...search,
                 [e.target.name] :  e.target.value
             }
         )
     }
 
+    const handleSubmit = (  e : React.FormEvent<HTMLFormElement> ) => { 
+
+        e.preventDefault()
+        
+        if( Object.values(search).includes('')){ 
+            console.log('Papi llena esa monda')
+        }
+
+        fetchWeather( search )
+    }
+
 
     return (
-        <form className={style.container}>
+        <form className={style.container} onSubmit={ handleSubmit }>
             <div className={style.input}>
                 <label htmlFor="">Ciudad : </label>
                 <input 

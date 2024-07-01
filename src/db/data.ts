@@ -1,4 +1,6 @@
-export const countries = [
+import { dbType } from "../Types"
+
+export const countries : dbType[] = [
     { code: 'US', name: 'Estados Unidos' },
     { code: 'MX', name: 'México' },
     { code: 'AR', name: 'Argentina' },

@@ -1,9 +1,9 @@
 export type dbType = { 
-    code : '',
-    name : ''
+    code : string,
+    name : string
 }
 
-export type CountryType = { 
-    city : '',
-    country : ''
+export type SearchType = { 
+    city : string
+    country : string
 }
