@@ -30,7 +30,7 @@ export default function Formulario( { fetchWeather } : FormularioProps ) {
         if( Object.values(search).includes('')){ 
             console.log('Papi llena esa monda')
         }
-
+        
         fetchWeather( search )
     }
 
