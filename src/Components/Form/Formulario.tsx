@@ -2,17 +2,20 @@ import { useState } from "react"
 import { countries } from "../../db/data"
 import style from './Formulario.module.css'
 import { SearchType } from "../../Types"
+import Error from "../Error/Error"
 
 type FormularioProps = { 
     fetchWeather :  ( search: SearchType ) => void
 }
 
-export default function Formulario( { fetchWeather } : FormularioProps ) {
+export default function Formulario( { fetchWeather  } : FormularioProps ) {
 
     const [ search , setSearch ] = useState<SearchType>( { 
         city : '',
         country : ''
     })
+
+    const [ error , setError ] = useState('')
 
     const handleChange = ( e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>  ) => { 
         setSearch (
@@ -27,16 +30,21 @@ export default function Formulario( { fetchWeather } : FormularioProps ) {
 
         e.preventDefault()
         
-        if( Object.values(search).includes('')){ 
-            console.log('Papi llena esa monda')
+        if( Object.values(search).includes('') ){ 
+            setError('Rellene los Campos')
+            return;
         }
-        
+        setError('')
         fetchWeather( search )
     }
 
 
     return (
+
         <form className={style.container} onSubmit={ handleSubmit }>
+
+            { error && <Error> { error }</Error> }
+            
             <div className={style.input}>
                 <label htmlFor="">Ciudad : </label>
                 <input 
@@ -70,6 +78,6 @@ export default function Formulario( { fetchWeather } : FormularioProps ) {
 
             <input type="submit" value='Buscar Clima' className={style.input3} />
         </form>
-
+        
     )
 }

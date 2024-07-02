@@ -7,7 +7,6 @@ function App() {
 
   const { fetchWeather , weater } = useWeather()
   
-
   return (
     <>
       <h1 className={style.title}> Clima Real Time </h1>
@@ -16,10 +15,20 @@ function App() {
         <Formulario
           fetchWeather={fetchWeather}
         />
-        
-        <Temp 
-          weather={weater}
-        />
+
+        {/* { error &&   } */}
+
+        {  weater.name ? 
+
+          <Temp 
+            weather={weater}
+          />
+          
+          :
+
+          <h1> Busca tu Ciudad </h1>
+
+        };
 
       </div>
     </>

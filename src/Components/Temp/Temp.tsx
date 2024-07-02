@@ -7,13 +7,16 @@ type TempProps = {
 
 export default function Temp( {weather} : TempProps  ) {
 
+  
   const centigradosTemp =  weather.main.temp - 273.15  
   const centigradosTempmax =  weather.main.temp_max - 273.15  
   const centigradosTempmin =  weather.main.temp_min - 273.15  
 
 
   return (
+
     <div className={styles.container} >
+      
       <h1>Clima de : <span> { weather.name } </span> </h1>
 
       <p className={ styles.temp } >{ centigradosTemp.toFixed(1) }&deg;C</p>  

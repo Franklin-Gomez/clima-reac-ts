@@ -1,0 +1,7 @@
+.container { 
+    background-color: red;
+    color: var(--white);
+    text-align: center;
+    padding : 2rem;
+    border-radius: .5rem;
+}
