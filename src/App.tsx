@@ -3,10 +3,11 @@ import Error from './Components/Error/Error'
 import Formulario from './Components/Form/Formulario'
 import Temp from './Components/Temp/Temp'
 import useWeather from './Hook/useWeather'
+import Spining from './Spining/Spining'
 
 function App() {
 
-  const {  weater , hasWeatherData  , fetchWeather , notfound} = useWeather()
+  const {  weater , hasWeatherData  , fetchWeather , notfound , loading } = useWeather()
   
   return (
     <>
@@ -16,6 +17,8 @@ function App() {
         <Formulario
           fetchWeather={fetchWeather}
         />
+
+        { loading && <Spining/> }
 
         {  hasWeatherData  && 
 

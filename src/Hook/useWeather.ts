@@ -1,6 +1,6 @@
 import { SearchType } from "../Types"
 import axios from "axios"
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { useState , useMemo } from "react"
 
 
@@ -34,16 +34,18 @@ export default function useWeather () {
 
     const [ notfound , setnotFound] = useState(false)
 
+    const [ loading , setLoading ] = useState( false )
+
     const fetchWeather = async (  search : SearchType  ) => { 
 
-        //setLoading(true)
+        // reiniciar las alertas
+        setLoading(true)
         setWeather( initialState )
         setnotFound(false) 
         
         const url = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${'5e13f47a14d9e3a1a3a6f7db87fe5c03'}` 
 
         try {
-
             const resultado = await axios( url )
 
             if( !resultado.data[0] ) { 
@@ -62,6 +64,7 @@ export default function useWeather () {
             const weatherData = mySchema.safeParse( data )
             
             if( weatherData.success ) { 
+                setLoading(false)
                 setWeather( weatherData.data )
             }
             
@@ -69,6 +72,8 @@ export default function useWeather () {
 
             console.log ( error )
 
+        } finally { 
+            setLoading(false)
         }
 
 
@@ -80,6 +85,7 @@ export default function useWeather () {
         weater,
         hasWeatherData,
         notfound,
+        loading,
         fetchWeather
     }
 

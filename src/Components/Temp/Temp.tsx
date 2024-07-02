@@ -14,7 +14,6 @@ export default function Temp( {weather} : TempProps  ) {
 
 
   return (
-
     <div className={styles.container} >
       
       <h1>Clima de : <span> { weather.name } </span> </h1>
