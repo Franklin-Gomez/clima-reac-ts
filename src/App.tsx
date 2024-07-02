@@ -1,11 +1,12 @@
 import style from './App.module.css'
+import Error from './Components/Error/Error'
 import Formulario from './Components/Form/Formulario'
 import Temp from './Components/Temp/Temp'
 import useWeather from './Hook/useWeather'
 
 function App() {
 
-  const { fetchWeather , weater } = useWeather()
+  const {  weater , hasWeatherData  , fetchWeather , notfound} = useWeather()
   
   return (
     <>
@@ -16,19 +17,15 @@ function App() {
           fetchWeather={fetchWeather}
         />
 
-        {/* { error &&   } */}
-
-        {  weater.name ? 
+        {  hasWeatherData  && 
 
           <Temp 
             weather={weater}
           />
-          
-          :
 
-          <h1> Busca tu Ciudad </h1>
+        }
 
-        };
+        { notfound && <Error> Ciudad no Encontrada </Error>}
 
       </div>
     </>

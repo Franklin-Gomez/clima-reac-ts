@@ -1,7 +1,7 @@
 import { SearchType } from "../Types"
 import axios from "axios"
 import { z } from 'zod'
-import { useState } from "react"
+import { useState , useMemo } from "react"
 
 
 // schema
@@ -16,27 +16,40 @@ const mySchema = z.object( {
 
 })
 
+const initialState = { 
+    name : '',
+    main : { 
+        temp : 0,
+        temp_max : 0,
+        temp_min : 0
+    }
+}
+
 export type weather = z.infer<typeof mySchema>
 
 // Custom Hook
 export default function useWeather () { 
 
-    const [ weater , setWeather ] = useState<weather>({ 
-        name : '',
-        main : { 
-            temp : 0,
-            temp_max : 0,
-            temp_min : 0
-        }
-    })
+    const [ weater , setWeather ] = useState<weather>( initialState )
+
+    const [ notfound , setnotFound] = useState(false)
 
     const fetchWeather = async (  search : SearchType  ) => { 
+
+        //setLoading(true)
+        setWeather( initialState )
+        setnotFound(false) 
         
         const url = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${'5e13f47a14d9e3a1a3a6f7db87fe5c03'}` 
 
         try {
 
             const resultado = await axios( url )
+
+            if( !resultado.data[0] ) { 
+                setnotFound( true );
+                return;
+            }
 
             const lon = resultado.data[0].lon
             const lat = resultado.data[0].lat
@@ -61,9 +74,12 @@ export default function useWeather () {
 
     }
 
+    const hasWeatherData = useMemo(() => weater.name , [weater])
 
     return { 
         weater,
+        hasWeatherData,
+        notfound,
         fetchWeather
     }
 

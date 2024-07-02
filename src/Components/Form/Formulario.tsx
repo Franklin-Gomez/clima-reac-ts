@@ -38,7 +38,6 @@ export default function Formulario( { fetchWeather  } : FormularioProps ) {
         fetchWeather( search )
     }
 
-
     return (
 
         <form className={style.container} onSubmit={ handleSubmit }>
