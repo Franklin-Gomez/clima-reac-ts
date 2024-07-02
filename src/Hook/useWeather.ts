@@ -64,7 +64,6 @@ export default function useWeather () {
             const weatherData = mySchema.safeParse( data )
             
             if( weatherData.success ) { 
-                setLoading(false)
                 setWeather( weatherData.data )
             }
             
